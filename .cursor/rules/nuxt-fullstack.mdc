@@ -9,30 +9,33 @@ alwaysApply: true
 
 这是一个基于 Nuxt.js 3 的全栈应用模板，采用"掌控力优于便利性"的设计理念。技术栈包括 tRPC、Prisma、Lucia Auth、MongoDB 和 Nuxt UI。
 
+**项目名称**: `nuxt-full-stack` (所有文档、引用和目录名称必须保持一致)
+
 ## 📋 核心配置文件
 
 - 项目配置: [nuxt.config.ts](mdc:nuxt.config.ts)
 - 数据库模式: [prisma/schema.prisma](mdc:prisma/schema.prisma)
 - 依赖管理: [package.json](mdc:package.json)
 - 环境变量: [.env](mdc:.env)
+- 项目文档: [README.md](mdc:README.md)
 
 ## 🚀 技术栈规范
 
 ### 前端开发
-- **框架**: Nuxt.js 3.17.5 - 统一前后端开发
+- **框架**: Nuxt.js 3 - 统一前后端开发
 - **UI 组件**: Nuxt UI + TailwindCSS
 - **类型安全**: 完整的 TypeScript 支持
 - **文件路由**: `pages/` 目录自动映射路由
 - **组件组织**: 按业务功能分组 (`components/features/`)
 
 ### 后端开发
-- **API**: tRPC 10.45.0 - 类型安全的端到端通信
-- **ORM**: Prisma 5.22.0 - 类型安全的数据库访问
-- **认证**: Lucia Auth 3.0.1 - 透明可控的身份认证
+- **API**: tRPC - 类型安全的端到端通信
+- **ORM**: Prisma - 类型安全的数据库访问
+- **认证**: Lucia Auth - 透明可控的身份认证
 - **数据库**: MongoDB - 文档型数据库
 
 ### 包管理
-- **工具**: pnpm 8.12.1 (优先使用)
+- **工具**: pnpm (优先使用) 或 npm
 - **Node.js**: 18+ 版本要求
 
 ## 🛠️ 开发规范
@@ -54,9 +57,9 @@ alwaysApply: true
 - 复杂样式使用 `@apply` 指令封装
 
 ### 4. 环境变量规范
-- 敏感配置统一使用 `.env` 文件管理
+- 敏感配置统一使用 [.env](mdc:.env) 文件管理
 - 数据库连接、API 密钥等不得硬编码
-- 参考 `.env.example` 文件格式
+- 参考 [.env.example](mdc:.env.example) 文件格式
 
 ### 5. 测试规范
 - 测试文件统一存储于 `test/` 目录
@@ -65,18 +68,60 @@ alwaysApply: true
 
 ## 🏗️ 项目结构指南
 
-### 目录说明
+### 完整目录结构
 ```
-├── components/           # Vue 组件 (按功能分组)
-│   ├── features/        # 业务功能组件
-│   └── ui/              # 基础 UI 组件
-├── pages/               # 页面路由 (文件即路由)
-├── server/              # 后端逻辑
-│   ├── api/             # Nuxt API 路由
-│   ├── trpc/            # tRPC 业务路由
-│   └── lib/             # 核心库封装
-├── prisma/              # 数据库模式
-└── utils/               # 工具函数
+📦 nuxt-full-stack/
+├── .env                          # 🔒 环境变量 (数据库连接、密钥等)
+├── .vscode/                      # ⚙️ 编辑器配置
+│   └── extensions.json
+│
+├── components/                   # 🖼️ 【前端】Vue 组件
+│   ├── common/                   #  ├─ 通用布局组件 (TheHeader.vue, TheFooter.vue)
+│   ├── features/                 #  ├─ ✨ 按业务功能组织的组件
+│   │   ├── posts/                #  │   ├─ (PostCard.vue, PostForm.vue)
+│   │   └── auth/                 #  │   └─ (LoginForm.vue)
+│   └── ui/                       #  └─ 基础UI封装 (AppButton.vue, AppCard.vue)
+│
+├── composables/                  # 🪝 【前端】Vue Composables (响应式逻辑)
+│   └── useAuth.ts
+│
+├── layouts/                      # 📐 【前端】页面布局
+│   └── default.vue
+│
+├── middleware/                   # 🚦 【前端】路由中间件
+│   └── auth.ts
+│
+├── pages/                        # 📄 【前端】页面 (文件即路由)
+│   └── index.vue
+│
+├── prisma/                       # 💾 【数据库】Prisma Schema 与迁移
+│   └── schema.prisma             #  └─ 定义所有数据模型
+│
+├── public/                       # 📦 【公共资源】静态文件
+│   └── favicon.ico
+│
+├── server/                       # 🚀 【后端】所有服务端逻辑
+│   ├── api/                      #  ├─ Nuxt 原始API路由
+│   │   ├── auth/                 #  │   ├─ 认证路由
+│   │   └── trpc/                 #  │   └─ tRPC入口
+│   │       └── [trpc].ts         #  │       └─ tRPC 单一入口点
+│   ├── db/                       #  ├─ 数据库客户端初始化
+│   │   └── index.ts              #  │   └─ (初始化并导出 PrismaClient)
+│   ├── lib/                      #  ├─ 核心库/服务封装
+│   │   └── auth.ts               #  │   └─ (初始化并导出 Lucia Auth 实例)
+│   └── trpc/                     #  └─ tRPC 业务路由实现
+│       ├── context.ts            #      ├─ 定义 tRPC 上下文
+│       ├── index.ts              #      ├─ 根路由 (合并所有子路由)
+│       ├── middleware.ts         #      ├─ tRPC 中间件
+│       └── routers/              #      └─ 按功能划分的 tRPC 子路由
+│
+├── utils/                        # 🛠️ 【通用】工具函数
+│   └── format.ts
+│
+├── app.vue                       # Nuxt 应用根组件
+├── nuxt.config.ts                # Nuxt 核心配置文件
+├── package.json                  # 依赖管理
+└── tsconfig.json                 # TypeScript 配置
 ```
 
 ### 开发流程
@@ -85,25 +130,41 @@ alwaysApply: true
 3. **页面开发**: 在 `pages/` 创建前端页面
 4. **组件复用**: 在 `components/` 创建通用组件
 
+## 💾 数据库配置
+
+### 远程 MongoDB 双环境配置
+- **开发环境**: `nuxt-fullstack-dev` 数据库
+- **生产环境**: `nuxt-fullstack-prod` 数据库
+- **连接地址**: `mongodb://root:g987phj6@dbconn.sealosgzg.site:47094/`
+
+### 环境隔离策略
+- 开发/生产使用不同的数据库实例
+- 数据库名称必须包含环境后缀 (-dev/-prod)
+- 环境变量通过 [.env](mdc:.env) 文件管理
+
 ## ⚡ 常用命令
 
-### 开发命令
+### 快速启动
 ```powershell
-# 启动开发服务器 (禁用遥测)
+# 禁用遥测并启动开发服务器
 $env:NUXT_TELEMETRY_DISABLED="1"; pnpm dev
+```
 
-# 数据库操作
+### 数据库操作
+```powershell
 pnpm db:push          # 推送模式到数据库
 pnpm db:studio        # 打开数据库管理界面
 pnpm db:generate      # 生成 Prisma 客户端
+```
 
-# 代码质量
+### 代码质量
+```powershell
 pnpm lint             # 代码检查
 pnpm lint:fix         # 自动修复代码问题
 pnpm format           # 代码格式化
 ```
 
-### 构建命令
+### 构建部署
 ```powershell
 pnpm build            # 生产构建
 pnpm start            # 生产启动
@@ -115,6 +176,7 @@ pnpm preview          # 预览构建结果
 ### 启动前检查
 - 执行环境启动命令前，必须检测目标端口是否已被占用
 - 避免重复启动服务造成端口冲突
+- 使用 `netstat -ano | findstr :3000` 检查端口状态
 
 ### 终端会话管理
 - 重启操作必须在原始终端会话中完成
@@ -146,13 +208,29 @@ pnpm preview          # 预览构建结果
 
 ### 常见问题
 1. **渲染器初始化失败**: 检查 tRPC 适配器配置
-2. **数据库连接问题**: 验证 `.env` 中的 `DATABASE_URL`
+2. **数据库连接问题**: 验证 [.env](mdc:.env) 中的 `DATABASE_URL`
 3. **端口占用**: 使用 `netstat -ano | findstr :3000` 检查
+4. **依赖问题**: 优先使用 `pnpm` 包管理器
 
 ### 开发提示
 - 优先修复 ESLint 错误，避免超过 3 次循环修复
 - 大文件 (>2500 行) 使用 search_replace 工具
 - 保持代码简洁，避免过度抽象
+
+## 🌟 核心特性
+
+### 端到端类型安全
+- tRPC + Prisma 提供完整类型推断
+- API 调用具有完整的 TypeScript 类型提示
+
+### 透明认证系统
+- Lucia Auth 实现完全可控的认证逻辑
+- 认证逻辑以标准 API 形式存在
+
+### 清晰项目架构
+- 代码即文档，无魔法配置
+- 文件路由自动映射
+- 组件和工具函数自动导入
 
 ## 📖 参考资源
 
@@ -160,8 +238,9 @@ pnpm preview          # 预览构建结果
 - [tRPC 文档](mdc:https:/trpc.io)
 - [Prisma 文档](mdc:https:/www.prisma.io)
 - [Lucia Auth 文档](mdc:https:/lucia-auth.com)
+- [项目 README](mdc:README.md)
 
 ---
 
-**💡 记住**: 掌控力优于便利性，代码即文档，无魔法配置。
+**💡 记住**: 掌控力优于便利性，代码即文档，无魔法配置。这是一个生产就绪的模板，适合构建需要长期维护的严肃项目。
 
