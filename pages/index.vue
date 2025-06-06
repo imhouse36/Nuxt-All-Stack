@@ -13,13 +13,47 @@
 
       <!-- 状态提示 -->
       <UAlert
-        icon="i-heroicons-check-circle"
-        color="green"
+        :icon="trpcStatus.icon"
+        :color="trpcStatus.color"
         variant="subtle"
-        title="✅ 系统状态正常"
-        description="项目现在可以正常运行，TailwindCSS 样式已启用。接下来将重新集成 tRPC API..."
+        :title="trpcStatus.title"
+        :description="trpcStatus.description"
         class="mb-8"
       />
+
+      <!-- tRPC 测试区域 -->
+      <UCard class="mb-8">
+        <template #header>
+          <h3 class="text-lg font-semibold flex items-center gap-2">
+            🔧 <span>tRPC 连接测试</span>
+          </h3>
+        </template>
+        
+        <div class="space-y-4">
+          <div class="flex items-center gap-4">
+            <UButton
+              @click="testTrpcConnection"
+              :loading="testing"
+              color="blue"
+              icon="i-heroicons-signal"
+            >
+              测试 tRPC 连接
+            </UButton>
+            
+            <UBadge
+              v-if="testResult"
+              :color="testResult.success ? 'green' : 'red'"
+              variant="subtle"
+            >
+              {{ testResult.success ? '连接正常' : '连接失败' }}
+            </UBadge>
+          </div>
+          
+          <div v-if="testResult" class="p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
+            <pre class="text-sm">{{ JSON.stringify(testResult, null, 2) }}</pre>
+          </div>
+        </div>
+      </UCard>
 
       <!-- 技术栈展示 -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -125,6 +159,66 @@ useHead({
   title: '首页 - Nuxt 全栈应用'
 })
 
+// tRPC 测试状态
+const testing = ref(false)
+const testResult = ref<any>(null)
+
+// 动态状态显示
+const trpcStatus = computed(() => {
+  if (testResult.value === null) {
+    return {
+      icon: 'i-heroicons-signal',
+      color: 'blue',
+      title: '🔧 tRPC 已集成',
+      description: 'tRPC API 适配器已重新配置完成，点击下方按钮测试连接状态。'
+    }
+  }
+  
+  if (testResult.value.success) {
+    return {
+      icon: 'i-heroicons-check-circle',
+      color: 'green',
+      title: '✅ tRPC 连接正常',
+      description: 'API 通信正常，端到端类型安全已启用。'
+    }
+  }
+  
+  return {
+    icon: 'i-heroicons-x-circle',
+    color: 'red',
+    title: '❌ tRPC 连接异常',
+    description: '请检查服务器状态和网络连接。'
+  }
+})
+
+// 测试 tRPC 连接
+async function testTrpcConnection() {
+  testing.value = true
+  testResult.value = null
+  
+  try {
+    // 使用 fetch 直接调用 tRPC API
+    const response = await $fetch('/api/trpc/user.health', {
+      method: 'GET'
+    })
+    
+    testResult.value = {
+      success: true,
+      data: response,
+      timestamp: new Date().toISOString()
+    }
+  } catch (error) {
+    console.error('tRPC 测试失败:', error)
+    testResult.value = {
+      success: false,
+      error: error instanceof Error ? error.message : '未知错误',
+      timestamp: new Date().toISOString()
+    }
+  } finally {
+    testing.value = false
+  }
+}
+
 // 技术栈数据
 const techStack = [
   {
@@ -143,7 +237,7 @@ const techStack = [
     name: 'tRPC',
     icon: '🔒',
     description: '端到端类型安全的API通信解决方案',
-    status: 'pending'
+    status: 'active'
   },
   {
     name: 'Prisma',

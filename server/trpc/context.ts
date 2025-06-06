@@ -8,7 +8,7 @@ import { db } from '~/server/db'
  * 创建tRPC上下文
  * 为每个请求提供数据库客户端和认证信息
  */
-export async function createContext(event: H3Event) {
+export async function createTRPCContext(event: H3Event) {
   // 从请求中获取认证会话
   const sessionId = getCookie(event, auth.sessionCookieName) ?? null
   
@@ -33,4 +33,4 @@ export async function createContext(event: H3Event) {
   }
 }
 
-export type Context = inferAsyncReturnType<typeof createContext> 
+export type Context = inferAsyncReturnType<typeof createTRPCContext> 

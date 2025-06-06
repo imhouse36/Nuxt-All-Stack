@@ -9,6 +9,16 @@ import { protectedProcedure } from '../middleware'
  * 用户相关API路由
  */
 export const userRouter = router({
+  // 健康检查端点 - 测试 tRPC 连接
+  health: publicProcedure.query(() => {
+    return {
+      status: 'ok',
+      message: 'tRPC 连接正常！',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development'
+    }
+  }),
+
   // 获取当前用户信息
   me: protectedProcedure.query(async ({ ctx }) => {
     return ctx.user
