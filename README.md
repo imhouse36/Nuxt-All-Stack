@@ -205,7 +205,3 @@ pnpm prisma studio # 数据库管理界面
 # 切换到生产环境  
 .\scripts\setup-environments.ps1 prod
 ```
-
-### **数据库操作**
-```powershell
-# 
