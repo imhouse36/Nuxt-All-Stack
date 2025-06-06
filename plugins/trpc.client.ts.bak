@@ -1,0 +1,39 @@
+// import { createTRPCClient, httpBatchLink } from '@trpc/client'
+// import superjson from 'superjson'
+// import type { AppRouter } from '~/server/trpc'
+
+export default defineNuxtPlugin(() => {
+  // 暂时禁用tRPC客户端以排查渲染器问题
+  console.log('tRPC plugin loaded (disabled for debugging)')
+  
+  return {
+    provide: {
+      trpc: null
+    }
+  }
+})
+
+/* 原始代码
+export default defineNuxtPlugin(() => {
+  const trpc = createTRPCClient<AppRouter>({
+    transformer: superjson,
+    links: [
+      httpBatchLink({
+        url: '/api/trpc',
+        fetch(url, options) {
+          return fetch(url, {
+            ...options,
+            credentials: 'include'
+          })
+        }
+      })
+    ]
+  })
+
+  return {
+    provide: {
+      trpc
+    }
+  }
+})
+*/ 

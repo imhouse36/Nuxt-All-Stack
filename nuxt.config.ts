@@ -2,19 +2,14 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   
-  // 模块配置
+  // 兼容性日期配置 - 消除启动警告
+  compatibilityDate: '2025-01-06',
+  
+  // 启用 Nuxt UI 模块 (包含 TailwindCSS)
   modules: [
     '@nuxt/ui'
   ],
-
-  // 自动导入配置
-  imports: {
-    dirs: ['utils', 'composables']
-  },
-
-  // CSS配置
-  css: ['~/assets/main.css'],
-
+  
   // 运行时配置
   runtimeConfig: {
     // 服务端环境变量
@@ -24,19 +19,6 @@ export default defineNuxtConfig({
     // 公共环境变量
     public: {
       appName: 'Nuxt 全栈应用'
-    }
-  },
-
-  // TypeScript配置
-  typescript: {
-    strict: true,
-    typeCheck: true
-  },
-
-  // 构建配置
-  nitro: {
-    experimental: {
-      wasm: true
     }
   }
 }) 

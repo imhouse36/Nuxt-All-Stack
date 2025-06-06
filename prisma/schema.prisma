@@ -12,17 +12,17 @@ datasource db {
 
 // 用户模型
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  username  String   @unique
-  name      String?
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  username     String   @unique
+  name         String?
+  avatar       String?
+  hashedPassword String  // 存储密码哈希
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   // Lucia Auth 认证相关
   sessions Session[]
-  keys     Key[]
 
   // 业务关联 (示例)
   posts Post[]
@@ -32,23 +32,12 @@ model User {
 
 // Lucia Auth 会话模型
 model Session {
-  id             String @id @map("_id")
-  userId         String @db.ObjectId
-  activeExpires  BigInt
-  idleExpires    BigInt
-  user           User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  id        String   @id @map("_id")
+  userId    String   @db.ObjectId
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@map("sessions")
-}
-
-// Lucia Auth 密钥模型 (用于密码等认证方式)
-model Key {
-  id              String  @id @map("_id")
-  hashedPassword  String?
-  userId          String  @db.ObjectId
-  user            User    @relation(references: [id], fields: [userId], onDelete: Cascade)
-
-  @@map("keys")
 }
 
 // 示例业务模型 - 文章
