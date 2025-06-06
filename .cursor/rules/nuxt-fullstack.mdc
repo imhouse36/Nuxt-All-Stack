@@ -1,0 +1,167 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Nuxt 全栈应用开发规则
+
+## 🎯 项目概述
+
+这是一个基于 Nuxt.js 3 的全栈应用模板，采用"掌控力优于便利性"的设计理念。技术栈包括 tRPC、Prisma、Lucia Auth、MongoDB 和 Nuxt UI。
+
+## 📋 核心配置文件
+
+- 项目配置: [nuxt.config.ts](mdc:nuxt.config.ts)
+- 数据库模式: [prisma/schema.prisma](mdc:prisma/schema.prisma)
+- 依赖管理: [package.json](mdc:package.json)
+- 环境变量: [.env](mdc:.env)
+
+## 🚀 技术栈规范
+
+### 前端开发
+- **框架**: Nuxt.js 3.17.5 - 统一前后端开发
+- **UI 组件**: Nuxt UI + TailwindCSS
+- **类型安全**: 完整的 TypeScript 支持
+- **文件路由**: `pages/` 目录自动映射路由
+- **组件组织**: 按业务功能分组 (`components/features/`)
+
+### 后端开发
+- **API**: tRPC 10.45.0 - 类型安全的端到端通信
+- **ORM**: Prisma 5.22.0 - 类型安全的数据库访问
+- **认证**: Lucia Auth 3.0.1 - 透明可控的身份认证
+- **数据库**: MongoDB - 文档型数据库
+
+### 包管理
+- **工具**: pnpm 8.12.1 (优先使用)
+- **Node.js**: 18+ 版本要求
+
+## 🛠️ 开发规范
+
+### 1. 中文优先原则
+- 所有对话和注释必须使用中文
+- 代码注释需要包含函数级说明
+- 错误信息和提示信息使用中文
+
+### 2. Windows 环境适配
+- 系统环境: Windows 11
+- 终端: PowerShell (优先) > CMD
+- 路径格式: 遵循 Windows 规范
+- 命令执行: 严格在终端窗口执行，不在编辑区域
+
+### 3. 样式管理规范
+- Vue 组件 CSS 超过 50 行时，必须抽离到外部 CSS 文件
+- 优先使用 TailwindCSS 原子类
+- 复杂样式使用 `@apply` 指令封装
+
+### 4. 环境变量规范
+- 敏感配置统一使用 `.env` 文件管理
+- 数据库连接、API 密钥等不得硬编码
+- 参考 `.env.example` 文件格式
+
+### 5. 测试规范
+- 测试文件统一存储于 `test/` 目录
+- 目录不存在时自动在根目录创建
+- 测试命令在独立终端窗口执行
+
+## 🏗️ 项目结构指南
+
+### 目录说明
+```
+├── components/           # Vue 组件 (按功能分组)
+│   ├── features/        # 业务功能组件
+│   └── ui/              # 基础 UI 组件
+├── pages/               # 页面路由 (文件即路由)
+├── server/              # 后端逻辑
+│   ├── api/             # Nuxt API 路由
+│   ├── trpc/            # tRPC 业务路由
+│   └── lib/             # 核心库封装
+├── prisma/              # 数据库模式
+└── utils/               # 工具函数
+```
+
+### 开发流程
+1. **数据建模**: 在 [prisma/schema.prisma](mdc:prisma/schema.prisma) 定义数据结构
+2. **API 开发**: 在 `server/trpc/routers/` 创建业务逻辑
+3. **页面开发**: 在 `pages/` 创建前端页面
+4. **组件复用**: 在 `components/` 创建通用组件
+
+## ⚡ 常用命令
+
+### 开发命令
+```powershell
+# 启动开发服务器 (禁用遥测)
+$env:NUXT_TELEMETRY_DISABLED="1"; pnpm dev
+
+# 数据库操作
+pnpm db:push          # 推送模式到数据库
+pnpm db:studio        # 打开数据库管理界面
+pnpm db:generate      # 生成 Prisma 客户端
+
+# 代码质量
+pnpm lint             # 代码检查
+pnpm lint:fix         # 自动修复代码问题
+pnpm format           # 代码格式化
+```
+
+### 构建命令
+```powershell
+pnpm build            # 生产构建
+pnpm start            # 生产启动
+pnpm preview          # 预览构建结果
+```
+
+## 🔒 终端操作安全规范
+
+### 启动前检查
+- 执行环境启动命令前，必须检测目标端口是否已被占用
+- 避免重复启动服务造成端口冲突
+
+### 终端会话管理
+- 重启操作必须在原始终端会话中完成
+- 测试/调试命令在独立终端窗口执行
+- 避免阻塞主服务终端
+
+### 自动化流程
+- 使用非交互标志避免用户输入阻塞 (如 `--yes`)
+- 长输出命令追加 `| cat` 避免分页器
+
+## 🎨 代码风格
+
+### TypeScript 规范
+- 启用严格模式
+- 使用接口定义复杂类型
+- 避免 `any` 类型，优先使用具体类型
+
+### Vue 组件规范
+- 使用 Composition API
+- 优先使用 `<script setup>` 语法
+- 组件命名使用 PascalCase
+
+### API 设计
+- tRPC 路由按业务功能分组
+- 使用 Zod 进行输入验证
+- 错误处理使用统一的错误类型
+
+## 🔧 故障排除
+
+### 常见问题
+1. **渲染器初始化失败**: 检查 tRPC 适配器配置
+2. **数据库连接问题**: 验证 `.env` 中的 `DATABASE_URL`
+3. **端口占用**: 使用 `netstat -ano | findstr :3000` 检查
+
+### 开发提示
+- 优先修复 ESLint 错误，避免超过 3 次循环修复
+- 大文件 (>2500 行) 使用 search_replace 工具
+- 保持代码简洁，避免过度抽象
+
+## 📖 参考资源
+
+- [Nuxt.js 官方文档](mdc:https:/nuxt.com)
+- [tRPC 文档](mdc:https:/trpc.io)
+- [Prisma 文档](mdc:https:/www.prisma.io)
+- [Lucia Auth 文档](mdc:https:/lucia-auth.com)
+
+---
+
+**💡 记住**: 掌控力优于便利性，代码即文档，无魔法配置。
+

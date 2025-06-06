@@ -25,5 +25,17 @@ lerna-debug.log*
 
 # Local env files
 !.env
-!.env.*
-!.env.example 
+!.env.local
+!.env.development
+!.env.production
+!.env.example
+
+# Test coverage
+coverage/
+
+# Build analysis
+.nuxt/analyze/
+
+# Database
+*.db
+*.sqlite 

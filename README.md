@@ -168,3 +168,44 @@ pnpm prisma studio # 数据库管理界面
 ---
 
 **💡 提示**: 这是一个生产就绪的模板，适合构建需要长期维护的严肃项目。
+
+# ✅ **远程 MongoDB 双环境配置完成！**
+
+我已经成功将您的项目配置为使用远程 MongoDB 数据库。以下是更新的配置概览：
+
+## 📋 **数据库配置**
+
+### **🔧 开发环境**
+- **数据库**: `nuxt-fullstack-dev` (开发专用)
+- **连接**: `mongodb://root:g987phj6@dbconn.sealosgzg.site:47094/nuxt-fullstack-dev?directConnection=true`
+
+### **🏭 生产环境**  
+- **数据库**: `nuxt-fullstack-prod` (生产专用)
+- **连接**: `mongodb://root:g987phj6@dbconn.sealosgzg.site:47094/nuxt-fullstack-prod?directConnection=true`
+
+## 🔒 **安全隔离策略**
+
+### **数据库隔离**
+- ✅ 开发环境使用 `-dev` 后缀数据库
+- ✅ 生产环境使用 `-prod` 后缀数据库
+- ✅ 相同服务器，不同数据库实例
+
+### **环境验证更新**
+- ✅ 移除本地数据库检查
+- ✅ 增加数据库名称后缀验证
+- ✅ 防止开发/生产数据库混用
+
+## 🚀 **使用指南**
+
+### **快速切换环境**
+```powershell
+# 切换到开发环境
+.\scripts\setup-environments.ps1 dev
+
+# 切换到生产环境  
+.\scripts\setup-environments.ps1 prod
+```
+
+### **数据库操作**
+```powershell
+# 

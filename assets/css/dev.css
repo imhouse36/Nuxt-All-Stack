@@ -1,0 +1,93 @@
+/* 开发环境专用样式 */
+
+/* 调试边框 - 帮助识别元素边界 */
+.debug-border {
+  @apply border border-red-500 border-dashed;
+}
+
+/* 开发环境调试信息显示 */
+.dev-info {
+  @apply fixed top-4 right-4 bg-blue-900 text-white p-2 rounded text-xs z-50 opacity-80;
+}
+
+/* 表单验证视觉反馈 */
+.form-error {
+  @apply border-red-500 bg-red-50;
+}
+
+.form-success {
+  @apply border-green-500 bg-green-50;
+}
+
+/* 开发环境加载状态指示器 */
+.loading-dev {
+  @apply animate-pulse bg-gray-200;
+}
+
+/* API 请求状态指示 */
+.api-loading::before {
+  content: "🔄 ";
+  @apply text-blue-500;
+}
+
+.api-error::before {
+  content: "❌ ";
+  @apply text-red-500;
+}
+
+.api-success::before {
+  content: "✅ ";
+  @apply text-green-500;
+}
+
+/* 组件边界可视化 */
+.component-boundary {
+  @apply border border-yellow-300 border-dotted bg-yellow-50 bg-opacity-20;
+}
+
+/* 响应式断点指示器 */
+@media (max-width: 640px) {
+  body::before {
+    content: "📱 SM";
+    @apply fixed top-0 left-0 bg-red-500 text-white px-2 py-1 text-xs z-50;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  body::before {
+    content: "📱 MD";
+    @apply fixed top-0 left-0 bg-orange-500 text-white px-2 py-1 text-xs z-50;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  body::before {
+    content: "💻 LG";
+    @apply fixed top-0 left-0 bg-blue-500 text-white px-2 py-1 text-xs z-50;
+  }
+}
+
+@media (min-width: 1025px) {
+  body::before {
+    content: "🖥️ XL";
+    @apply fixed top-0 left-0 bg-green-500 text-white px-2 py-1 text-xs z-50;
+  }
+}
+
+/* 开发环境性能监控样式 */
+.perf-monitor {
+  @apply fixed bottom-4 left-4 bg-gray-900 text-green-400 p-2 rounded text-xs font-mono z-50;
+}
+
+/* 开发环境控制台日志样式 */
+.console-log {
+  @apply bg-gray-100 border-l-4 border-blue-500 p-2 text-sm font-mono;
+}
+
+.console-warn {
+  @apply bg-yellow-50 border-l-4 border-yellow-500 p-2 text-sm font-mono;
+}
+
+.console-error {
+  @apply bg-red-50 border-l-4 border-red-500 p-2 text-sm font-mono;
+} 
